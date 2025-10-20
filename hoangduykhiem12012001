@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thư 20/10 gửi em Tuyết Anh • Mở thư + Vườn Tulip</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fffaf5;
+    --ink:#42253f;
+    --accent:#e91e63;
+    --bg1:#fce4ec;
+    --bg2:#fff0f7;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: linear-gradient(to top, var(--bg1) 0%, var(--bg2) 60%);
+    font-family:'Quicksand', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    color:var(--ink);
+    overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .halo{
+    position:fixed; inset:0;
+    background: radial-gradient(40% 24% at 50% 60%, rgba(0,0,0,.08), transparent 60%);
+    pointer-events:none;
+  }
+  canvas{ position:fixed; bottom:0; left:0; width:100vw; height:58vh; z-index:0 }
+  .credit{ position:fixed; right:10px; top:8px; font-size:12px; opacity:.65; z-index:20 }
+
+  .stage{
+    position:relative; z-index:10;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:14px; text-align:center;
+  }
+  .btn-open{
+    border:none; padding:10px 16px; border-radius:999px; cursor:pointer;
+    background:#ffffffc4; backdrop-filter: blur(6px);
+    box-shadow:0 10px 22px rgba(0,0,0,.12);
+    color:#7a2e4d; font-weight:700;
+  }
+  .btn-open:hover{ transform: translateY(-1px) }
+
+  .envelope{
+    width:min(360px, 88vw);
+    height:230px;
+    position:relative;
+    perspective:1200px;
+    filter: drop-shadow(0 18px 30px rgba(0,0,0,.16));
+  }
+  .env-body{
+    width:100%; height:100%;
+    background: linear-gradient(180deg,#ffe9ef,#ffdbe7);
+    border-radius:12px;
+    position:relative; overflow:hidden;
+    border:1px solid #ffd1e1;
+  }
+  .flap{
+    position:absolute; left:0; right:0; top:0;
+    height:60%; transform-origin:50% 0%;
+    background: linear-gradient(180deg,#ffc1d6,#ffb0cd);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-top-left-radius:12px; border-top-right-radius:12px;
+    box-shadow: inset 0 -6px 10px rgba(0,0,0,.08);
+  }
+  .seal{
+    position:absolute; left:50%; top:44%;
+    transform: translate(-50%,-50%);
+    width:64px; height:64px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #ff8fb3, #e91e63 70%);
+    border:6px solid #ffd1e1; color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:28px; box-shadow:0 8px 18px rgba(233,30,99,.35);
+  }
+  .letter-sheet{
+    position:absolute; left:50%; bottom:10px; transform: translateX(-50%);
+    width:86%; height:78%;
+    background: var(--paper);
+    border-radius:10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.1);
+  }
+  .open .flap{ animation: flip 1.2s ease forwards; }
+  @keyframes flip{
+    0%{ transform: rotateX(0deg) }
+    60%{ transform: rotateX(-170deg) }
+    100%{ transform: rotateX(-180deg) }
+  }
+  .open .seal{ animation: pop 0.5s ease forwards; }
+  @keyframes pop{
+    0%{ transform: translate(-50%,-50%) scale(1) }
+    100%{ transform: translate(-50%,-200%) scale(0) }
+  }
+  .open .letter-sheet{ animation: slideUp 1.25s 0.45s ease forwards; }
+  @keyframes slideUp{
+    0%{ transform: translate(-50%,0); opacity:1 }
+    70%{ transform: translate(-50%,-140%); opacity:1 }
+    100%{ transform: translate(-50%,-150%); opacity:0 }
+  }
+
+  .letter-wrap{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; z-index:12;
+    transition: opacity .6s ease .6s;
+    padding:18px;
+  }
+  .letter-wrap.show{ opacity:1; pointer-events:auto }
+  .letter{
+    width:min(820px, 92vw);
+    background: var(--paper);
+    border-radius: 20px;
+    box-shadow: 0 14px 40px rgba(0,0,0,.12);
+    padding: clamp(18px, 3.5vw, 34px);
+    border: 1px solid rgba(0,0,0,.05);
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.85)),
+      repeating-linear-gradient(180deg, rgba(255,192,203,.12) 0 1px, transparent 1px 48px);
+  }
+  .title{
+    font-family: 'Great Vibes','Dancing Script', cursive;
+    color: var(--accent);
+    text-align:center;
+    font-size: clamp(30px, 6vw, 56px);
+    margin: 4px 0 8px;
+    text-shadow: 0 2px 0 rgba(255,255,255,.7), 0 6px 12px rgba(233,30,99,.25);
+  }
+  .hand{
+    font-family:'Dancing Script','Great Vibes', cursive;
+    font-size: clamp(18px, 3.3vw, 28px);
+    line-height: 1.55;
+  }
+  .hand p{ margin:.3em 0 }
+  .closing{
+    margin-top: 10px; text-align:right;
+    font-family:'Dancing Script','Great Vibes', cursive;
+    font-size: clamp(20px, 3.5vw, 30px);
+    color:#b31359;
+  }
+</style>
+</head>
+<body>
+  <div class="halo"></div>
+  <div class="credit">Vườn Tulip • Mở thư 20/10</div>
+
+  <div class="stage" id="stage">
+    <div class="envelope" id="envelope">
+      <div class="env-body">
+        <div class="flap"></div>
+        <div class="seal">💮</div>
+        <div class="letter-sheet"></div>
+      </div>
+    </div>
+    <button class="btn-open" id="btnOpen">Mở thư của em 💌</button>
+    <div class="hint">Nhấn để mở, xem lời chúc 20/10 gửi em Tuyết Anh</div>
+  </div>
+
+  <div class="letter-wrap" id="letterWrap" aria-hidden="true">
+    <div class="letter">
+      <div class="title">💐 Chúc Mừng Tuyết Anh Ngày 20/10 💐</div>
+      <div class="hand">
+        <p>Nhân dịp Ngày Phụ Nữ Việt Nam 20/10, chúc <b>Tuyết Anh</b> một ngày thật vui vẻ, ý nghĩa và đong đầy những điều tốt đẹp.</p>
+        <p>Chúc em luôn giữ được nụ cười rạng rỡ, sự tự tin và năng lượng tích cực vốn có. Hãy luôn mạnh mẽ, xinh đẹp và là nguồn cảm hứng cho những người xung quanh nhé.</p>
+        <p>Anh chúc em sẽ luôn thành công trên con đường mình chọn, gặt hái được nhiều thành tựu xứng đáng với sự nỗ lực của bản thân. Điều quan trọng là em phải luôn yêu thương bản thân và tận hưởng mọi khoảnh khắc tuyệt vời của cuộc sống.</p>
+        <p><b>Mọi điều tốt đẹp nhất sẽ đến với em!</b> 💖</p>
+      </div>
+      <div class="closing">— Gửi em 💞</div>
+    </div>
+  </div>
+
+  <canvas id="tulipGarden"></canvas>
+
+  <audio id="bgm" preload="auto" loop>
+    <source src="https://cdn.pixabay.com/audio/2022/11/16/audio_37fa3e3f79.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const btn = document.getElementById('btnOpen');
+    const env = document.getElementById('envelope');
+    const stage = document.getElementById('stage');
+    const letterWrap = document.getElementById('letterWrap');
+    const bgm = document.getElementById('bgm');
+
+    btn.addEventListener('click', async ()=>{
+      env.classList.add('open');
+      try{ await bgm.play(); }catch(e){}
+      setTimeout(()=>{
+        stage.style.display='none';
+        letterWrap.classList.add('show');
+      }, 1600);
+    });
+
+    // Hiệu ứng cánh hoa bay
+    const canvas = document.getElementById('tulipGarden');
+    const ctx = canvas.getContext('2d');
+    function resize(){ canvas.width = innerWidth; canvas.height = Math.max(260, innerHeight*0.58); }
+    resize(); addEventListener('resize', resize);
+
+    const petals = Array.from({length: 22}).map(()=> ({
+      x: Math.random()*innerWidth,
+      y: Math.random()*canvas.height,
+      emoji: ['🌸','💗','🌷'][Math.floor(Math.random()*3)],
+      speed: .5 + Math.random(),
+      drift: .2 + Math.random()*.6,
+    }));
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.font='20px serif';
+      petals.forEach(p=>{
+        ctx.save(); ctx.globalAlpha=.9; ctx.fillText(p.emoji,p.x,p.y); ctx.restore();
+        p.y += p.speed; p.x += Math.sin(p.y*.02)*p.drift;
+        if(p.y>canvas.height){ p.y=-20; p.x=Math.random()*innerWidth; }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
